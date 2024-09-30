@@ -36,9 +36,6 @@ RUN curl -L "https://github.com/docker/compose/releases/latest/download/docker-c
 RUN docker --version
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-COPY  id_rsa /root/.ssh/id_rsa
-COPY  id_rsa.pub /root/.ssh/id_rsa.pub
-COPY deployment/docker-compose-gradelink.yml .
 RUN chmod +x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
