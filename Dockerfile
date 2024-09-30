@@ -9,7 +9,6 @@ LABEL 'com.github.actions.icon'='send'
 LABEL 'com.github.actions.color'='green'
 
 
-# Install required dependencies
 RUN apk --no-cache add \
     curl \
     bash \
@@ -20,7 +19,8 @@ RUN apk --no-cache add \
     device-mapper \
     iptables \
     eudev \
-    util-linux
+    util-linux \
+    openssh  # Install OpenSSH for ssh-agent and ssh-add
 
 # Download and install Docker 26.x
 RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-26.0.0.tgz -o docker.tgz \
