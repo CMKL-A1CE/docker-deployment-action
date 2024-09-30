@@ -82,6 +82,7 @@ esac
 
 
 SSH_HOST=${INPUT_REMOTE_DOCKER_HOST#*@}
+docker -v
 
 echo "Registering SSH keys..."
 
