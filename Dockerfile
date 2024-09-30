@@ -8,27 +8,37 @@ LABEL 'com.github.actions.description'='supports docker-compose and Docker Swarm
 LABEL 'com.github.actions.icon'='send'
 LABEL 'com.github.actions.color'='green'
 
-# Install Docker from Alpine repository
-RUN apk add --no-cache \
-    docker \
+
+# Install required dependencies
+RUN apk --no-cache add \
     curl \
     bash \
-    git \
-    openssh-client \
     ca-certificates \
-    wget \
+    openrc \
     gnupg \
-    openrc
+    shadow \
+    device-mapper \
+    iptables \
+    eudev \
+    util-linux
 
-# Install the latest Docker Compose binary
+# Download and install Docker 26.x
+RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-26.0.0.tgz -o docker.tgz \
+    && tar xzvf docker.tgz \
+    && mv docker/* /usr/local/bin/ \
+    && rm docker.tgz
+
+# Install Docker Compose (latest version)
 RUN curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
 
-# Verify Docker and Docker Compose versions
-RUN docker --version && docker-compose --version
+# Verify Docker version
+RUN docker --version
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY  id_rsa /root/.ssh/id_rsa
+COPY  id_rsa.pub /root/.ssh/id_rsa.pub
+COPY deployment/docker-compose-gradelink.yml .
 RUN chmod +x /docker-entrypoint.sh
-RUN ls -l /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
