@@ -57,6 +57,8 @@ else
   DEPLOYMENT_COMMAND_OPTIONS=" --log-level debug --host ssh://$INPUT_REMOTE_DOCKER_HOST:$INPUT_REMOTE_DOCKER_PORT"
 fi
 
+echo $INPUT_DEPLOYMENT_MODE
+echo $INPUT_DOCKER_COMPOSE_VER
 
 if [ "$INPUT_DEPLOYMENT_MODE" == "docker-compose" ] && [ "$INPUT_DOCKER_COMPOSE_VER" == "v2" ]; then
   DOCKER_COMP_COMMAND="docker compose"
@@ -75,6 +77,7 @@ case $INPUT_DEPLOYMENT_MODE in
   ;;
 
   *)
+    echo "DEBUG: inside case..."
     INPUT_DEPLOYMENT_MODE="docker-compose"
     DEPLOYMENT_COMMAND="$DOCKER_COMP_COMMAND $DEPLOYMENT_COMMAND_OPTIONS -f $STACK_FILE"
     echo $DEPLOYMENT_COMMAND
