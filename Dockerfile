@@ -22,11 +22,17 @@ RUN apk --no-cache add \
     util-linux \
     openssh  # Install OpenSSH for ssh-agent and ssh-add
 
-# Download and install Docker 26.x
-RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-26.0.0.tgz -o docker.tgz \
+# Download and install Docker 27.3.1
+RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-27.3.1.tgz -o docker.tgz \
     && tar xzvf docker.tgz \
     && mv docker/* /usr/local/bin/ \
     && rm docker.tgz
+    
+# Download and install Docker 26.x
+#RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-26.0.0.tgz -o docker.tgz \
+#    && tar xzvf docker.tgz \
+#    && mv docker/* /usr/local/bin/ \
+#    && rm docker.tgz
 
 # Install Docker Compose (latest version)
 RUN curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
