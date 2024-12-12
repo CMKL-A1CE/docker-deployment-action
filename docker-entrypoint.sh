@@ -3,7 +3,7 @@ set -eu
 
 execute_ssh(){
   echo "Execute Over SSH: $@"
-  ssh -q -t -i "$HOME/.ssh/id_rsa" \
+  ssh -v -q -t -i "$HOME/.ssh/id_rsa" \
       -o UserKnownHostsFile=/dev/null \
       -p $INPUT_REMOTE_DOCKER_PORT \
       -o StrictHostKeyChecking=no "$INPUT_REMOTE_DOCKER_HOST" "$@"
