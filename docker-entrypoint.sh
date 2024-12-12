@@ -105,6 +105,10 @@ if ! [ -z "$INPUT_DOCKER_PRUNE" ] && [ $INPUT_DOCKER_PRUNE = 'true' ] ; then
 fi
 
 if ! [ -z "$INPUT_COPY_STACK_FILE" ] && [ $INPUT_COPY_STACK_FILE = 'true' ] ; then
+    ssh -i "$HOME/.ssh/id_rsa" \
+    -o StrictHostKeyChecking=no \
+    -p $INPUT_REMOTE_DOCKER_PORT \
+    "$INPUT_REMOTE_DOCKER_HOST" "echo 'SSH Connection Test'"
   execute_ssh "mkdir -p $INPUT_DEPLOY_PATH/stacks || true"
   FILE_NAME="docker-stack-$(date +%Y%m%d%s).yaml"
   echo $FILE_NAME
