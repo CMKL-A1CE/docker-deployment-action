@@ -2,11 +2,14 @@
 set -eu
 
 execute_ssh(){
-  echo "Execute Over SSH: $@"
-  ssh -v -q -t -i "$HOME/.ssh/id_rsa" \
+  echo "Executing Over SSH: $@"
+  ssh -v -i "$HOME/.ssh/id_rsa" \
       -o UserKnownHostsFile=/dev/null \
       -p $INPUT_REMOTE_DOCKER_PORT \
       -o StrictHostKeyChecking=no "$INPUT_REMOTE_DOCKER_HOST" "$@"
+  if [ $? -ne 0 ]; then
+    echo "SSH Command Failed with Exit Code: $?"
+  fi
 }
 
 if [ -z "$INPUT_REMOTE_DOCKER_PORT" ]; then
@@ -104,11 +107,7 @@ if ! [ -z "$INPUT_DOCKER_PRUNE" ] && [ $INPUT_DOCKER_PRUNE = 'true' ] ; then
   yes | docker --log-level debug --host "ssh://$INPUT_REMOTE_DOCKER_HOST:$INPUT_REMOTE_DOCKER_PORT" system prune -a 2>&1
 fi
 
-if ! [ -z "$INPUT_COPY_STACK_FILE" ] && [ $INPUT_COPY_STACK_FILE = 'true' ] ; then
-    ssh -i "$HOME/.ssh/id_rsa" \
-    -o StrictHostKeyChecking=no \
-    -p $INPUT_REMOTE_DOCKER_PORT \
-    "$INPUT_REMOTE_DOCKER_HOST" "echo 'SSH Connection Test'"
+if ! [ -z "$INPUT_COPY_STACK_FILE" ] && [ $INPUT_COPY_STACK_FILE = 'true' ] ; then    
   execute_ssh "mkdir -p $INPUT_DEPLOY_PATH/stacks || true"
   FILE_NAME="docker-stack-$(date +%Y%m%d%s).yaml"
   echo $FILE_NAME
